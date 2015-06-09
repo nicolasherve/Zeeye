@@ -1,0 +1,23 @@
+{
+    "name": "zeeye/zeeye",
+    "description": "Zeeye PHP Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Hervé",
+            "email": "nherve@gmail.com"
+        }
+    ],
+    "require": {
+    	"php": ">=5.5.0",
+        "stimlog/stimlog": "0.1.0-alpha"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zeeye\\": "src/Zeeye/"
+        }
+    }
+}
