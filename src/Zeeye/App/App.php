@@ -2,7 +2,6 @@
 
 namespace Zeeye\App;
 
-use Zeeye\Router\Router;
 use Zeeye\Util\Autoloader\Autoloader;
 use Zeeye\Util\Date\Date;
 
@@ -13,13 +12,6 @@ use Zeeye\Util\Date\Date;
  * @license    http://opensource.org/licenses/mit-license.php
  */
 class App {
-
-    /**
-     * The name of the application (used as the associated directory's name)
-     * 
-     * @var string
-     */
-    private $_name;
 
     /**
      * The path to the application's directory
@@ -64,40 +56,19 @@ class App {
     private $_loggersConfiguration;
 
     /**
-     * The application router
-     * 
-     * @var Router
-     */
-    private $_router;
-
-    /**
-     * The list of App instances
-     * 
-     * @var array
-     */
-    private static $_instances = array();
-
-    /**
-     * The current application instance
+     * The App instance
      * 
      * @var App
      */
-    private static $_current = null;
+    private static $_instance = null;
 
     /**
      * Private constructor
      */
-    private function __construct($name, $configurationPath = '') {
-        // The name can only contain alpha-numeric characters and the underscore character
-        if (preg_match('/[^a-z0-9_]/i', $name)) {
-            throw new AppException("The name of your application can only contain alpha-numeric characters and the underscore character");
-        }
-
-        // Registers the application's name
-        $this->_name = $name;
+    private function __construct($path, $configurationPath = '') {
 
         // Registers the application's path
-        $this->_path = realpath(ZEEYE_PATH . '../../apps/' . $name) . '/';
+        $this->_path = realpath($path) . '/';
 
         // Registers the application's configuration path
         $this->_configurationPath = $configurationPath;
@@ -107,17 +78,6 @@ class App {
         $this->_routesConfiguration = new RoutesConf($this->_path . $this->_configurationPath);
         $this->_dbConfiguration = new DbConf($this->_path . $this->_configurationPath);
         $this->_loggersConfiguration = new LoggersConf($this->_path . $this->_configurationPath);
-
-        $this->_router = null;
-    }
-
-    /**
-     * Gets the application's name
-     * 
-     * @return string
-     */
-    public function getName() {
-        return $this->_name;
     }
 
     /**
@@ -152,15 +112,6 @@ class App {
 
     public function getDbConfiguration() {
         return $this->_dbConfiguration;
-    }
-
-    /**
-     * Get the application's router
-     *
-     * @return Router
-     */
-    public function getRouter() {
-        return $this->_router;
     }
 
     /**
@@ -223,7 +174,6 @@ class App {
 
         // Fetch the required routes settings
         $this->_routesConfiguration->fetch();
-        $this->_router = Router::getInstanceForApp($this);
 
         // Fetch the optional loggers
         $this->_loggersConfiguration->fetch();
@@ -255,8 +205,8 @@ class App {
     public static function setup($name, $configurationPath = '') {
 
         // If a previous setup was called
-        if (isset(self::$_instances[$name])) {
-            throw new AppException('The App::setup() operation must be called only once for a given application');
+        if (isset(self::$_instance)) {
+            throw new AppException('The App::setup() operation must be called only once');
         }
 
         // Create the App object
@@ -265,32 +215,20 @@ class App {
         // Fetch the related configurations
         $app->_fetchConfigurations();
 
-        // Register it as the current application
-        if (!isset(self::$_current)) {
-            self::$_current = $app;
-            self::$_current->_activateConfiguration();
-        }
+        // Activate the app
+        $app->_activateConfiguration();
 
         // Register it in the instances list
-        self::$_instances[$name] = $app;
+        self::$_instance = $app;
     }
 
     /**
-     * Get the App corresponding to the given application's name
+     * Get the App for the current application
      * 
-     * If no name is given, the current application will be returned
-     * 
-     * @param string $name name of the requested application
      * @return App the requested application
      */
-    public static function getInstance($name = null) {
-        if (!isset($name)) {
-            return self::$_current;
-        }
-        if (!isset(self::$_instances[$name])) {
-            throw new AppException("You must create the instance with App::setup() before trying to get it through App::getInstance()");
-        }
-        return self::$_instances[$name];
+    public static function getInstance() {
+        return self::$_instance;
     }
 
 }
