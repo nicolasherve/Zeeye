@@ -2,7 +2,6 @@
 
 namespace Zeeye\Dispatcher;
 
-use Zeeye\App\App;
 use Zeeye\Controller\Controller;
 use Zeeye\Filter\Filter;
 use Zeeye\Response\Response;
@@ -142,7 +141,7 @@ class Dispatcher {
             }
 
             // Get the router
-            $router = App::getInstance()->getRouter();
+            $router = Router::getInstance();
 
             // Find the route for the given request
             $route = $router->findRouteForPath($this->_request->getPath());

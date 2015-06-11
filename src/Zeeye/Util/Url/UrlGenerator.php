@@ -3,6 +3,7 @@
 namespace Zeeye\Util\Url;
 
 use Zeeye\App\App;
+use Zeeye\Router\Router;
 use Zeeye\Util\Exception\InvalidTypeException;
 
 /**
@@ -24,7 +25,7 @@ class UrlGenerator {
             return $url->toString();
         }
         if (is_array($url)) {
-            $url = App::getInstance()->getRouter()->generateUrlForRoute($url[0], isset($url[1]) ? $url[1] : array());
+            $url = Router::getInstance()->generateUrlForRoute($url[0], isset($url[1]) ? $url[1] : array());
             return $url->toString();
         }
         if (is_string($url)) {

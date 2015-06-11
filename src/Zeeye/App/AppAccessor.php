@@ -14,9 +14,9 @@ trait AppAccessor {
      *
      * @return App
      */
-    public function getApp($name = null) {
+    public function getApp() {
         if (!isset($this->_app)) {
-            $this->_app = App::getInstance($name);
+            $this->_app = App::getInstance();
         }
 
         return $this->_app;

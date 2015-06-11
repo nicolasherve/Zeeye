@@ -16,7 +16,7 @@ class Router {
     private $_webrootHost;
     private $_webrootPort;
     private $_webrootPath;
-    private static $_instances = array();
+    private static $_instance = null;
 
     private function __construct() {
         
@@ -154,19 +154,18 @@ class Router {
     }
 
     /**
-     * Return the router instance corresponding to the given App
+     * Return the router instance
      * 
-     * @param App $app Application instance
      * @return Router
      */
-    public static function getInstanceForApp(App $app) {
-        if (!isset(self::$_instances[$app->getName()])) {
+    public static function getInstance() {
+        if (!isset(self::$_instance)) {
             $router = new Router();
-            $router->_setupForApp($app);
+            $router->_setupForApp(App::getInstance());
 
-            self::$_instances[$app->getName()] = $router;
+            self::$_instance = $router;
         }
-        return self::$_instances[$app->getName()];
+        return self::$_instance;
     }
 
 }
