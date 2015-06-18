@@ -32,28 +32,28 @@ class App {
      * 
      * @var AppConf
      */
-    private $_appConfiguration;
+    private $_appConf;
 
     /**
      * Routes configuration
      *
      * @var RoutesConf
      */
-    private $_routesConfiguration;
+    private $_routesConf;
 
     /**
      * Databases configuration
      *
      * @var DbConf
      */
-    private $_dbConfiguration;
+    private $_dbConf;
 
     /**
      * Loggers configuration
      *
      * @var LoggersConf
      */
-    private $_loggersConfiguration;
+    private $_loggersConf;
 
     /**
      * The App instance
@@ -65,19 +65,24 @@ class App {
     /**
      * Private constructor
      */
-    private function __construct($path, $configurationPath = '') {
+    private function __construct($applicationPath, $configurationPath=null) {
 
         // Registers the application's path
-        $this->_path = realpath($path) . '/';
+        $this->_path = realpath($applicationPath) . '/';
 
         // Registers the application's configuration path
-        $this->_configurationPath = $configurationPath;
+        if (isset($configurationPath)) {
+        	$this->_configurationPath = $configurationPath;
+        }
+        else {
+        	$this->_configurationPath = $this->_path . '/conf/';
+        }
 
         // Creates the configurations instances
-        $this->_appConfiguration = new AppConf($this->_path . $this->_configurationPath);
-        $this->_routesConfiguration = new RoutesConf($this->_path . $this->_configurationPath);
-        $this->_dbConfiguration = new DbConf($this->_path . $this->_configurationPath);
-        $this->_loggersConfiguration = new LoggersConf($this->_path . $this->_configurationPath);
+        $this->_appConf = new AppConf($this->_configurationPath);
+        $this->_routesConf = new RoutesConf($this->_configurationPath);
+        $this->_dbConf = new DbConf($this->_configurationPath);
+        $this->_loggersConf = new LoggersConf($this->_configurationPath);
     }
 
     /**
@@ -98,20 +103,20 @@ class App {
         return $this->_configurationPath;
     }
 
-    public function getAppConfiguration() {
-        return $this->_appConfiguration;
+    public function getConf() {
+        return $this->_appConf;
     }
 
-    public function getRoutesConfiguration() {
-        return $this->_routesConfiguration;
+    public function getRoutesConf() {
+        return $this->_routesConf;
     }
 
-    public function getLoggersConfiguration() {
-        return $this->_loggersConfiguration;
+    public function getLoggersConf() {
+        return $this->_loggersConf;
     }
 
-    public function getDbConfiguration() {
-        return $this->_dbConfiguration;
+    public function getDbConf() {
+        return $this->_dbConf;
     }
 
     /**
@@ -119,7 +124,7 @@ class App {
      */
     private function _setupErrorHandler() {
         // Get the error handler class name
-        $errorHandlerClassName = $this->_appConfiguration->getErrorHandler();
+        $errorHandlerClassName = $this->_appConf->getErrorHandler();
 
         // If there is no error handler, stops
         if (!empty($errorHandlerClassName)) {
@@ -146,7 +151,7 @@ class App {
      */
     private function _setupExceptionHandler() {
         // Get the exception handler class name
-        $exceptionHandlerClassName = $this->_appConfiguration->getExceptionHandler();
+        $exceptionHandlerClassName = $this->_appConf->getExceptionHandler();
 
         // If there is no exception handler, stops
         if (empty($exceptionHandlerClassName)) {
@@ -170,21 +175,21 @@ class App {
 
     private function _fetchConfigurations() {
         // Fetch the application configuration
-        $this->_appConfiguration->fetch();
+        $this->_appConf->fetch();
 
         // Fetch the required routes settings
-        $this->_routesConfiguration->fetch();
+        $this->_routesConf->fetch();
 
         // Fetch the optional loggers
-        $this->_loggersConfiguration->fetch();
+        $this->_loggersConf->fetch();
 
         // Fetch the optional database profiles
-        $this->_dbConfiguration->fetch();
+        $this->_dbConf->fetch();
     }
 
     private function _activateConfiguration() {
         // Setup the loggers
-        $this->_loggersConfiguration->setup();
+        $this->_loggersConf->setup();
 
         // Setup the errors handler
         $this->_setupErrorHandler();
@@ -193,16 +198,16 @@ class App {
         $this->_setupExceptionHandler();
 
         // Sets the default timezone for the application
-        Date::setDefaultTimeZone($this->_appConfiguration->getDefaultLocaleTimezone());
+        Date::setDefaultTimeZone($this->_appConf->getDefaultLocaleTimezone());
     }
 
     /**
      * Setup the application
      * 
-     * @param string $name name of the application
-     * @param string $configurationPath the configuration's directory path
+     * @param string $applicationPath path to the application
+     * @param string $configurationPath path to the application configuration
      */
-    public static function setup($name, $configurationPath = '') {
+    public static function setup($applicationPath, $configurationPath=null) {
 
         // If a previous setup was called
         if (isset(self::$_instance)) {
@@ -210,7 +215,7 @@ class App {
         }
 
         // Create the App object
-        $app = new App($name, $configurationPath);
+        $app = new App($applicationPath, $configurationPath);
 
         // Fetch the related configurations
         $app->_fetchConfigurations();

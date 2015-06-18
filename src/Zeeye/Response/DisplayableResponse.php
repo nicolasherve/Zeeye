@@ -79,7 +79,7 @@ abstract class DisplayableResponse extends Response {
         // The final content is not set yet
         $this->_setContent(null);
         // The default charset is the one indicated in the configuration
-        $this->setCharset(App::getInstance()->getAppConfiguration()->getDefaultCharset());
+        $this->setCharset(App::getInstance()->getConf()->getDefaultCharset());
         // Get the filters
         $this->_filters = Filter::getAll();
     }

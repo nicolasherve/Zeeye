@@ -50,7 +50,7 @@ abstract class Helper {
      */
     public static function create($name, View $view) {
         // Get the requested helper class name
-        $helperClassName = App::getInstance()->getAppConfiguration()->getHelper($name);
+        $helperClassName = App::getInstance()->getConf()->getHelper($name);
 
         // Instantiates the corresponding helper
         $helper = new $helperClassName();

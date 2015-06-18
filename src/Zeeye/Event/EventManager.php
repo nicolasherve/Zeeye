@@ -29,7 +29,7 @@ class EventManager {
         }
 
         // Get the registered listeners (class names)
-        $classNames = App::getInstance()->getAppConfiguration()->getEventListeners();
+        $classNames = App::getInstance()->getConf()->getEventListeners();
 
         // If there is no defined listeners
         if (empty($classNames)) {

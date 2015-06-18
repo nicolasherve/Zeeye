@@ -29,7 +29,7 @@ abstract class CacheManager {
             $cache = new DummyCache();
         } else {
             // Get the requested cache class configuration settings
-            $cacheConfig = App::getInstance()->getAppConfiguration()->getCache($name);
+            $cacheConfig = App::getInstance()->getConf()->getCache($name);
 
             // Retrieve the class name from the settings
             $cacheClassName = $cacheConfig['class'];
@@ -52,7 +52,7 @@ abstract class CacheManager {
     }
 
     public static function isCacheEnabled() {
-        return App::getInstance()->getAppConfiguration()->useCache();
+        return App::getInstance()->getConf()->useCache();
     }
 
 }

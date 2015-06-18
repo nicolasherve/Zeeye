@@ -328,7 +328,7 @@ class Date {
     public function toString($format = null) {
         // If no format is defined, try to use the one specified in the configuration
         if (!isset($format)) {
-            $format = App::getInstance()->getAppConfiguration()->getDefaultLocaleDateFormat();
+            $format = App::getInstance()->getConf()->getDefaultLocaleDateFormat();
         }
         // If no format is defined, use the one specified in the current class
         if (!isset($format)) {
@@ -353,7 +353,7 @@ class Date {
      */
     public static function setDefaultTimeZone($timeZone = null) {
         if (!isset($timeZone)) {
-            $timeZone = App::getInstance()->getAppConfiguration()->getDefaultLocaleTimezone();
+            $timeZone = App::getInstance()->getConf()->getDefaultLocaleTimezone();
         }
         if (!isset($timeZone)) {
             $timeZone = ini_get('date.timezone');

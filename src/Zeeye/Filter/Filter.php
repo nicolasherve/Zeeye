@@ -69,7 +69,7 @@ abstract class Filter {
             self::$_instances = array();
 
             // For each filter specified in the configuration
-            foreach (App::getInstance()->getAppConfiguration()->getFilters() as $filterClassName) {
+            foreach (App::getInstance()->getConf()->getFilters() as $filterClassName) {
                 // Instantiate the filter
                 $filter = new $filterClassName();
 

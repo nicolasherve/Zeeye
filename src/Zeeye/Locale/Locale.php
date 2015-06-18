@@ -36,7 +36,7 @@ class Locale {
      */
     public static function getLanguage() {
         if (!isset(self::$_language)) {
-            self::$_language = App::getInstance()->getAppConfiguration()->getDefaultLocaleLanguage();
+            self::$_language = App::getInstance()->getConf()->getDefaultLocaleLanguage();
         }
         return self::$_language;
     }

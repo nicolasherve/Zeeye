@@ -30,7 +30,7 @@ class UrlGenerator {
         }
         if (is_string($url)) {
             if ($url[0] == '/') {
-                return App::getInstance()->getAppConfiguration()->getWebroot() . $url;
+                return App::getInstance()->getConf()->getWebroot() . $url;
             }
             return $url;
         }

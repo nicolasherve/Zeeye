@@ -652,7 +652,7 @@ abstract class Dao {
         }
 
         // Get the requested dao config
-        $daoConfig = App::getInstance()->getAppConfiguration()->getDao($name);
+        $daoConfig = App::getInstance()->getConf()->getDao($name);
 
         // Get the dao class name
         $daoClassName = $daoConfig['class'];

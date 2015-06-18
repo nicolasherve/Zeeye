@@ -24,14 +24,14 @@ class Router {
 
     private function _setupForApp(App $app) {
 
-        $this->_webrootUsername = Url::extractUserName($app->getAppConfiguration()->getWebroot());
-        $this->_webrootPassword = Url::extractPassword($app->getAppConfiguration()->getWebroot());
-        $this->_webrootHost = Url::extractHost($app->getAppConfiguration()->getWebroot());
-        $this->_webrootPort = Url::extractPort($app->getAppConfiguration()->getWebroot());
-        $this->_webrootPath = Url::extractPath($app->getAppConfiguration()->getWebroot());
+        $this->_webrootUsername = Url::extractUserName($app->getConf()->getWebroot());
+        $this->_webrootPassword = Url::extractPassword($app->getConf()->getWebroot());
+        $this->_webrootHost = Url::extractHost($app->getConf()->getWebroot());
+        $this->_webrootPort = Url::extractPort($app->getConf()->getWebroot());
+        $this->_webrootPath = Url::extractPath($app->getConf()->getWebroot());
         $this->_app = $app;
 
-        $routes = $app->getRoutesConfiguration()->getRoutes();
+        $routes = $app->getRoutesConf()->getRoutes();
         foreach ($routes as $routeName => $routeInfo) {
             $this->connect($routeName, Route::create($routeInfo[0], $routeInfo[1]));
         }

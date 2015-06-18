@@ -53,7 +53,7 @@ class Session {
         }
 
         // Get the session adapter class name from configuration
-        $adapterClassName = App::getInstance()->getAppConfiguration()->getSessionAdapter();
+        $adapterClassName = App::getInstance()->getConf()->getSessionAdapter();
         if (!isset($adapterClassName)) {
             return;
         }

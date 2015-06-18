@@ -102,7 +102,7 @@ class FileResponse extends Response {
         }
 
         // The default charset is the one indicated in the configuration
-        $this->setCharset(App::getInstance()->getAppConfiguration()->getDefaultCharset());
+        $this->setCharset(App::getInstance()->getConf()->getDefaultCharset());
 
         // If there is a given content type
         if (!empty($contentType)) {

@@ -22,7 +22,7 @@ class String {
      */
     public static function encodeHtml($string, $charset = null) {
         if (!isset($charset)) {
-            $charset = App::getInstance()->getAppConfiguration()->getDefaultCharset();
+            $charset = App::getInstance()->getConf()->getDefaultCharset();
         }
 
         // & --> &amp;
@@ -45,7 +45,7 @@ class String {
      */
     public static function decodeHtml($string, $charset = null) {
         if (!isset($charset)) {
-            $charset = App::getInstance()->getAppConfiguration()->getDefaultCharset();
+            $charset = App::getInstance()->getConf()->getDefaultCharset();
         }
 
         // &amp; --> &

@@ -182,7 +182,7 @@ abstract class Zone {
      */
     public static function create($name) {
         // Get the requested zone class name
-        $className = App::getInstance()->getAppConfiguration()->getZone($name);
+        $className = App::getInstance()->getConf()->getZone($name);
 
         // Instantiates the corresponding zone
         $zone = new $className();

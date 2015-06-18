@@ -300,6 +300,18 @@ class AppConf extends Conf {
         }
         return (string) $this->_settings['default-charset'];
     }
+    
+    /**
+     * Gets the path to the tmp directory
+     *
+     * @return string
+     */
+    public function getTmpDirPath() {
+    	if (!isset($this->_settings['tmp-dir-path'])) {
+    		return null;
+    	}
+    	return (string) $this->_settings['tmp-dir-path'];
+    }
 
     /**
      * Checks the required configuration settings

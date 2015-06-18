@@ -13,7 +13,7 @@ class FileCache extends CacheAdapter {
     }
 
     private function _generateCacheDirectory() {
-        return ZEEYE_TMP_PATH . App::getInstance()->getName() . '/cache';
+        return App::getInstance()->getConf()->getTmpDirPath() . '/cache';
     }
 
     private function _generateFilePathFromKey($key) {

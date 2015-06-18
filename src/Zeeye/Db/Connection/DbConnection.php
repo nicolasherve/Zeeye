@@ -271,7 +271,7 @@ abstract class DbConnection {
     public static function getInstance($profileName = null) {
         // We make sure the database profiles from configuration are loaded
         if (!isset(self::$_dbProfiles)) {
-            self::$_dbProfiles = App::getInstance()->getDbConfiguration()->getDbProfiles();
+            self::$_dbProfiles = App::getInstance()->getDbConf()->getDbProfiles();
         }
 
         // If the connection corresponding to the given profile name does not exist
@@ -279,7 +279,7 @@ abstract class DbConnection {
 
             // If the profile name is not set
             if (!isset($profileName)) {
-                $profileName = App::getInstance()->getDbConfiguration()->getDefaultProfileName();
+                $profileName = App::getInstance()->getDbConf()->getDefaultProfileName();
             }
 
             // A name is given, try to retrieve the profile of the name
