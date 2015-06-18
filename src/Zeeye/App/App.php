@@ -126,7 +126,7 @@ class App {
         $errorHandlerClassName = $this->_appConf->getErrorHandler();
 
         // If there is no error handler, stops
-        if (!empty($errorHandlerClassName)) {
+        if (empty($errorHandlerClassName)) {
             return;
         }
 
