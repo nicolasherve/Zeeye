@@ -65,17 +65,16 @@ class App {
     /**
      * Private constructor
      */
-    private function __construct($applicationPath, $configurationPath=null) {
+    private function __construct($applicationPath, $configurationPath = null) {
 
         // Registers the application's path
         $this->_path = realpath($applicationPath) . '/';
 
         // Registers the application's configuration path
         if (isset($configurationPath)) {
-        	$this->_configurationPath = $configurationPath;
-        }
-        else {
-        	$this->_configurationPath = $this->_path . '/conf/';
+            $this->_configurationPath = $configurationPath;
+        } else {
+            $this->_configurationPath = $this->_path . '/conf/';
         }
 
         // Creates the configurations instances
@@ -139,9 +138,6 @@ class App {
             throw new AppException('The error handler you specified with the $app["error-handler"] setting must define a class name and a method, separated by ::');
         }
 
-        // Make sure the error handler is included
-        Autoloader::autoload($errorHandlerInfo[0]);
-
         // Set the error handler
         set_error_handler($errorHandlerClassName);
     }
@@ -165,9 +161,6 @@ class App {
         if (!isset($exceptionHandlerInfo[1])) {
             throw new AppException('The exception handler you specified with the $app["exception-handler"] setting must define a class name and a method, separated by ::');
         }
-
-        // Make sure the error handler is included
-        Autoloader::autoload($exceptionHandlerInfo[0]);
 
         // Set the error handler
         set_exception_handler($exceptionHandlerClassName);
@@ -207,7 +200,7 @@ class App {
      * @param string $applicationPath path to the application
      * @param string $configurationPath path to the application configuration
      */
-    public static function setup($applicationPath, $configurationPath=null) {
+    public static function setup($applicationPath, $configurationPath = null) {
 
         // If a previous setup was called
         if (isset(self::$_instance)) {
