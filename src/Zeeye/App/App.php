@@ -2,7 +2,6 @@
 
 namespace Zeeye\App;
 
-use Zeeye\Util\Autoloader\Autoloader;
 use Zeeye\Util\Date\Date;
 
 /**

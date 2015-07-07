@@ -6,6 +6,7 @@ use Zeeye\App\AppAccessor;
 use Zeeye\Response\Response;
 use Zeeye\Response\ResponseGenerator;
 use Zeeye\Router\Route;
+use Zeeye\Router\Router;
 use Zeeye\Util\Exception\InvalidTypeException;
 use Zeeye\Util\Flash\Flash;
 use Zeeye\Util\Request\Request;
@@ -213,7 +214,7 @@ abstract class Controller {
 
             // If the action's method does not exist
             if (!method_exists($controller, $actionName)) {
-                return self::getInstanceForRoute($this->getApp()->getRouter()->getRoute404());
+                return self::getInstanceForRoute(Router::getInstance()->getRoute404());
             }
 
             // Initializes the controller
