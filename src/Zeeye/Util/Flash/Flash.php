@@ -13,6 +13,7 @@ class Flash {
 
     private function __construct($name) {
         $this->_name = $name;
+        $this->_type = null;
         $this->_messages = array();
         $this->_synchronizeFromSession();
     }
@@ -20,23 +21,23 @@ class Flash {
     public function getName() {
         return $this->_name;
     }
-    
+
     public function getType() {
-    	return $this->_type;
+        return $this->_type;
     }
-    
+
     public function getMessages() {
-    	return $this->_messages;
+        return $this->_messages;
     }
 
     private function _addMessage($message, $type) {
-        if (isset($this->_type)) {
-        	if ($this->_type != $type) {
-        		throw new FlashException("You cannot add a message with type [".$type."] because some messages with type [".$this->_type."] already exist");
-        	}
+        if (!empty($this->_type)) {
+            if ($this->_type != $type) {
+                throw new FlashException("You cannot add a message with type [" . $type . "] because some messages with type [" . $this->_type . "] already exist");
+            }
         }
-    	$this->_type = $type;
-    	$this->_messages[] = $message;
+        $this->_type = $type;
+        $this->_messages[] = $message;
         $this->_synchronizeToSession();
     }
 
@@ -71,13 +72,13 @@ class Flash {
     }
 
     private function _reset() {
-    	$this->_messages = array();
-    	$this->_type = null;
+        $this->_messages = array();
+        $this->_type = null;
     }
-    
+
     public function remove() {
         $flash = clone($this);
-        
+
         $this->_reset();
 
         $this->_synchronizeToSession();
@@ -91,20 +92,20 @@ class Flash {
 
     private function _synchronizeFromSession() {
         if (!Session::isStarted()) {
-        	return;
+            return;
         }
-    	if (Session::has($this->_name)) {
-            $this->_messages = (array) Session::get($this->_name.'.messages');
-            $this->_type = (string) Session::get($this->_name.'.type');
+        if (Session::has($this->_name . '.messages')) {
+            $this->_messages = (array) Session::get($this->_name . '.messages');
+            $this->_type = (string) Session::get($this->_name . '.type');
         }
     }
 
     private function _synchronizeToSession() {
-    	if (!Session::isStarted()) {
-    		return;
-    	}
-    	Session::set($this->_name.'.messages', $this->_messages);
-    	Session::set($this->_name.'.type', $this->_type);
+        if (!Session::isStarted()) {
+            return;
+        }
+        Session::set($this->_name . '.messages', $this->_messages);
+        Session::set($this->_name . '.type', $this->_type);
     }
 
     /**
