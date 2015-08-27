@@ -1,11 +1,12 @@
 <?php
+
 namespace Zeeye\Validator;
 
-use Zeeye\Util\String\String;
-use Zeeye\Util\String\Utf8String;
-use Zeeye\Util\Date\Date;
-use Zeeye\Util\Url\Url;
 use Zeeye\App\App;
+use Zeeye\Util\Date\Date;
+use Zeeye\Util\String\Utf8String;
+use Zeeye\Util\Url\Url;
+
 /**
  * Abstract class for all Validator objects
  *
@@ -13,6 +14,7 @@ use Zeeye\App\App;
  * @license    http://opensource.org/licenses/mit-license.php
  */
 abstract class Validator {
+
     /**
      * A list of errors when validating the data
      *
@@ -39,17 +41,33 @@ abstract class Validator {
 
     /**
      * Remove all the registered errors
+     * 
+     * An optional argument can be given to indicate which key is used to clear the errors
      */
-    public function clearErrors() {
+    public function clearErrors($key = null) {
+        if (isset($key)) {
+            if ($this->hasErrors($key)) {
+                $this->_errors[$key] = array();
+            }
+            return;
+        }
         $this->_errors = array();
     }
 
     /**
      * Get the current list of errors
      *
+     * An optional argument can be given to indicate which key is used to get the required errors
+     * 
      * @return array
      */
-    public function getErrors() {
+    public function getErrors($key = null) {
+        if (isset($key)) {
+            if ($this->hasErrors($key)) {
+                return $this->_errors[$key];
+            }
+            return array();
+        }
         return $this->_errors;
     }
 
@@ -61,20 +79,20 @@ abstract class Validator {
      * @param string $key the key used to store the error
      * @return boolean
      */
-    public function hasErrors($key=null) {
-    	if (isset($key)) {
-    		return isset($this->_errors[$key]);
-    	}
-    	return !empty($this->_errors);
+    public function hasErrors($key = null) {
+        if (isset($key)) {
+            return isset($this->_errors[$key]);
+        }
+        return !empty($this->_errors);
     }
-    
+
     /**
      * Indicates if the current validation is valid (contains no error)
      * 
      * @return boolean
      */
     public function isValid() {
-    	return empty($this->_errors);
+        return empty($this->_errors);
     }
 
     /**
@@ -116,9 +134,9 @@ abstract class Validator {
      */
     public function hasMinLength($text, $length) {
         if (Utf8String::isUtf8($text)) {
-        	return Utf8String::length($text) >= $length;
+            return Utf8String::length($text) >= $length;
         }
-    	return strlen($text) >= $length;
+        return strlen($text) >= $length;
     }
 
     /**
@@ -129,10 +147,10 @@ abstract class Validator {
      * @return boolean
      */
     public function hasMaxLength($text, $length) {
-    	if (Utf8String::isUtf8($text)) {
-    		return Utf8String::length($text) <= $length;
-    	}
-    	return strlen($value) <= $length;
+        if (Utf8String::isUtf8($text)) {
+            return Utf8String::length($text) <= $length;
+        }
+        return strlen($value) <= $length;
     }
 
     /**
@@ -144,7 +162,7 @@ abstract class Validator {
     public function isNumber($value) {
         return is_numeric($value);
     }
-    
+
     /**
      * Check method provided to test if the given value is a valid URL
      *
@@ -205,13 +223,12 @@ abstract class Validator {
     public function isFloat($value) {
         if (strpos($value, '.')) {
             return is_float($value);
-        }
-        elseif (strpos($value, ',')) {
+        } elseif (strpos($value, ',')) {
             return is_float(str_replace(',', '.', $value));
         }
         return false;
     }
-    
+
     /**
      * Instantiates and returns the Validator instance corresponding to the given name
      *
@@ -219,17 +236,18 @@ abstract class Validator {
      * @return Validator the validator instance
      */
     public static function create($name) {
-    	// Get the requested validator class name
-    	$className = App::getInstance()->getValidator($name);
-    	
-    	// Instantiates the corresponding validator
-    	$validator = new $className();
-    	
-    	// If the validator does not extend the Validator class, throw an exception
-    	if (!$validator instanceof Validator) {
-    		throw new ValidatorException('The class ['.$className.'] specified for the validator ['.$name.'] is not a valid Validator class');
-    	}
-    	
-    	return $validator;
+        // Get the requested validator class name
+        $className = App::getInstance()->getValidator($name);
+
+        // Instantiates the corresponding validator
+        $validator = new $className();
+
+        // If the validator does not extend the Validator class, throw an exception
+        if (!$validator instanceof Validator) {
+            throw new ValidatorException('The class [' . $className . '] specified for the validator [' . $name . '] is not a valid Validator class');
+        }
+
+        return $validator;
     }
+
 }
