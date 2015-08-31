@@ -15,6 +15,8 @@ use Zeeye\Util\Url\Url;
  */
 abstract class Validator {
 
+    const DEFAULT_KEY_NAME = 'default';
+
     /**
      * A list of errors when validating the data
      *
@@ -27,6 +29,13 @@ abstract class Validator {
      */
     public function __construct() {
         $this->_errors = array();
+    }
+
+    /**
+     * Setup
+     */
+    public function setup() {
+        
     }
 
     /**
@@ -44,14 +53,10 @@ abstract class Validator {
      * 
      * An optional argument can be given to indicate which key is used to clear the errors
      */
-    public function clearErrors($key = null) {
-        if (isset($key)) {
-            if ($this->hasErrors($key)) {
-                $this->_errors[$key] = array();
-            }
-            return;
+    public function clearErrors($key = self::DEFAULT_KEY_NAME) {
+        if ($this->hasErrors($key)) {
+            $this->_errors[$key] = array();
         }
-        $this->_errors = array();
     }
 
     /**
@@ -61,14 +66,11 @@ abstract class Validator {
      * 
      * @return array
      */
-    public function getErrors($key = null) {
-        if (isset($key)) {
-            if ($this->hasErrors($key)) {
-                return $this->_errors[$key];
-            }
-            return array();
+    public function getErrors($key = self::DEFAULT_KEY_NAME) {
+        if ($this->hasErrors($key)) {
+            return $this->_errors[$key];
         }
-        return $this->_errors;
+        return array();
     }
 
     /**
@@ -79,11 +81,8 @@ abstract class Validator {
      * @param string $key the key used to store the error
      * @return boolean
      */
-    public function hasErrors($key = null) {
-        if (isset($key)) {
-            return isset($this->_errors[$key]);
-        }
-        return !empty($this->_errors);
+    public function hasErrors($key = self::DEFAULT_KEY_NAME) {
+        return isset($this->_errors[$key]);
     }
 
     /**
@@ -246,6 +245,9 @@ abstract class Validator {
         if (!$validator instanceof Validator) {
             throw new ValidatorException('The class [' . $className . '] specified for the validator [' . $name . '] is not a valid Validator class');
         }
+
+        // Setup
+        $validator->setup();
 
         return $validator;
     }
