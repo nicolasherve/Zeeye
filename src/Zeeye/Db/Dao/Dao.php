@@ -522,8 +522,14 @@ abstract class Dao {
             // Executes the SELECT query
             return $this->_connection->selectQuery($query);
         } catch (DbConnectionException $e) {
+            // If the query is an instance of SqlQuery
+            if ($query instanceof SqlQuery) {
+                // Extract the query string
+                $query = $query->toString();
+            }
+
             // Throws an exception
-            throw new DaoException('The Dao::_selectAll() operation failed due to a DbConnection exception', 0, $e);
+            throw new DaoException('The Dao::_selectAll() operation failed due to a DbConnection exception when executing the query [' . $query . ']', 0, $e);
         }
     }
 
@@ -538,8 +544,13 @@ abstract class Dao {
             // Executes the SELECT query
             $results = $this->_connection->selectQuery($query);
         } catch (DbConnectionException $e) {
+            // If the query is an instance of SqlQuery
+            if ($query instanceof SqlQuery) {
+                // Extract the query string
+                $query = $query->toString();
+            }
             // Throws an exception
-            throw new DaoException('The Dao::_selectFirst() operation failed due to a DbConnection exception', 0, $e);
+            throw new DaoException('The Dao::_selectFirst() operation failed due to a DbConnection exception when executing the query [' . $query . ']', 0, $e);
         }
 
         if (!isset($results[0])) {
@@ -569,8 +580,13 @@ abstract class Dao {
             // Executes the query
             $nbAffectedRows = $this->_connection->executeQuery($query);
         } catch (DbConnectionException $e) {
+            // If the query is an instance of SqlQuery
+            if ($query instanceof SqlQuery) {
+                // Extract the query string
+                $query = $query->toString();
+            }
             // Throws an exception
-            throw new DaoException('The Dao::_execute() operation failed due to a DbConnection exception', 0, $e);
+            throw new DaoException('The Dao::_execute() operation failed due to a DbConnection exception when executing the query [' . $query . ']', 0, $e);
         }
 
         // Callback after runnning the query
