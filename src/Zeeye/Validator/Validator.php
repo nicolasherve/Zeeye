@@ -15,6 +15,11 @@ use Zeeye\Util\Url\Url;
  */
 abstract class Validator {
 
+    /**
+     * The default key name to store error messages
+     * 
+     * @var string
+     */
     const DEFAULT_KEY_NAME = 'default';
 
     /**
@@ -25,14 +30,16 @@ abstract class Validator {
     private $_errors;
 
     /**
-     * Constructor
+     * Private constructor
      */
-    public function __construct() {
+    private function __construct() {
         $this->_errors = array();
     }
 
     /**
-     * Setup
+     * Execute optional process right after the instanciation
+     *
+     * Concrete subclasses can override this method
      */
     public function setup() {
         
@@ -41,11 +48,11 @@ abstract class Validator {
     /**
      * Add the given error message to the current list of errors
      *
-     * @param mixed $key the key used to store the error message
      * @param string $message the error message
+     * @param mixed $key the key used to store the error message
      */
-    public function addError($key, $message) {
-        $this->_errors[$key] = $message;
+    public function addError($message, $key = self::DEFAULT_KEY_NAME) {
+        $this->_errors[$key][] = $message;
     }
 
     /**
