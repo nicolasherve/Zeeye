@@ -46,6 +46,16 @@ abstract class Validator {
     }
 
     /**
+     * Set the given error message to the given error key
+     *
+     * @param string $message the error message
+     * @param mixed $key the key used to store the error message
+     */
+    public function setError($message, $key) {
+        $this->_errors[$key] = $message;
+    }
+
+    /**
      * Add the given error message to the current list of errors
      *
      * @param string $message the error message
