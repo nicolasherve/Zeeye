@@ -30,10 +30,18 @@ abstract class Validator {
     private $_errors;
 
     /**
+     * An error flag indicating if there are errors, or not
+     * 
+     * @var boolean
+     */
+    private $_errorFlag;
+
+    /**
      * Private constructor
      */
     private function __construct() {
         $this->_errors = array();
+        $this->_errorFlag = false;
     }
 
     /**
@@ -46,13 +54,12 @@ abstract class Validator {
     }
 
     /**
-     * Set the given error message to the given error key
-     *
-     * @param string $message the error message
-     * @param mixed $key the key used to store the error message
+     * Indicates that the current validator should be considered with errors
+     * 
+     * This is an alternative way of indicating errors but without specifying messages
      */
-    public function setError($message, $key) {
-        $this->_errors[$key] = $message;
+    public function flagError() {
+        $this->_errorFlag = true;
     }
 
     /**
@@ -91,9 +98,9 @@ abstract class Validator {
     }
 
     /**
-     * Indicates whether the current validation contains errors
+     * Indicates whether the current validation contains error messages
      * 
-     * An optional argument can be given to check if there are some errors for the given key
+     * An optional argument can be given to check if there are some error messages for the given key
      * 
      * @param string $key the key used to store the error
      * @return boolean
@@ -103,12 +110,14 @@ abstract class Validator {
     }
 
     /**
-     * Indicates if the current validation is valid (contains no error)
+     * Indicates if the current validator is valid (contains no error)
+     * 
+     * The current validator is considered valid only if there are no error messages AND the error flag is set to false
      * 
      * @return boolean
      */
     public function isValid() {
-        return empty($this->_errors);
+        return empty($this->_errors) && !$this->_errorFlag;
     }
 
     /**
