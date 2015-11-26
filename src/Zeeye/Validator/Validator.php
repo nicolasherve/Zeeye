@@ -262,7 +262,7 @@ abstract class Validator {
      */
     public static function create($name) {
         // Get the requested validator class name
-        $className = App::getInstance()->getValidator($name);
+        $className = App::getInstance()->getConf()->getValidator($name);
 
         // Instantiates the corresponding validator
         $validator = new $className();
